@@ -59,7 +59,7 @@ A doctor can spend medication and write reports with your medical file, and he c
 | get         | `/readmedicl`  | {Health status, Treatments, diseases,  Conversion |  201           | 400      |  Admin only `<PrivateRoute>`    | Admin to get one    | delete         | `/deletemedicl`  | {Health status, Treatments, diseases,  Conversion |  201           | 400      |  Admin only `<PrivateRoute>`    | Admin to delete one 
 | Post         | `/medicl`  | {Health status, Treatments, diseases,  Conversion |  201           | 400      |  Admin only `<PrivateRoute>`    | Admin to post one 
 | Post         | `/ceratrole`  | {Role, Permossin |  201           | 400      |  Admin only `<PrivateRoute>`    | Admin to post one 
-| get         | `/readmedicl`  | {Role, Permossin |  201           | 400      |  Admin only `<PrivateRoute>`    | Admin to get one 
+
  
   ## UML Diagram
   
