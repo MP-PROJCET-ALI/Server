@@ -42,7 +42,7 @@ A doctor can spend medication and write reports with your medical file, and he c
  - **The user who logged in with the role can delete or modify with the time of modification and the `admin` name.**
  - **The user has a login and has the role of a control board that contains all the information and statistics of the web site that enable them to control all    patients.**
  
- ## RE Diagram
+ ## ER Diagram
  
  ![Blank diagram backEnd project](https://user-images.githubusercontent.com/92247967/146677427-60e1ad46-9b5a-4c0d-93ea-f92ce133243a.png)
  
