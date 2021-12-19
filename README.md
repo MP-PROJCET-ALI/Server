@@ -10,7 +10,10 @@
 ➤ Trello: https://trello.com/b/ObBLMFK9/final-project-planning
 
 ➤ Slides: https://Slides
- story
+
+
+
+## story
 
  **Location Page**
  I entered the site with two options and on the left a motion picture. The right side contains a new account or login.
