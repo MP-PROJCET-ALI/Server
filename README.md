@@ -129,3 +129,23 @@ To run the server on production mode.
 | timestamp   | Date   | N/A      | Date now      |
 
  
+ ### ▼ Doctor
+
+| key          | type                | options          | default value    |
+| ------------ | ------------------- | ---------------- | ---------------- |
+| username        | String              | required, unique | N/A              |
+| Role         | Schema <Roles>               | N/A         | N/A              |
+| Hospital     | String              | N/A              | N/A              |
+
+
+ ### ▼ Hospital
+
+| key          | type                | options          | default value    |
+| ------------ | ------------------- | ---------------- | ---------------- |
+| name        | String              | required, unique | N/A              |
+| Rejon         | String              | required         | N/A              |
+| the ID number     | String              | N/A              | N/A              |
+ | license number     | String              | N/A              | N/A              |
+
+ 
+ 
