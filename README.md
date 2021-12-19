@@ -93,4 +93,39 @@ npm run start
 
 To run the server on production mode.
  
+ ## ⚪ Models
+
+### ▼ Users
+
+| key          | type                | options          | default value    |
+| ------------ | ------------------- | ---------------- | ---------------- |
+| email        | String              | required, unique | N/A              |
+| name         | String              | required         | N/A              |
+| password     | String              | N/A              | N/A              |
+| phone       | number              | N/A              | N/A |
+| Role       | Schema <Roles>             | N/A              | N/A              |
+| passwordCode | String              | N/A              | ''               |
+| timestamp    | Date                | N/A              | Date now         |
+ 
+ 
+  ### ▼ Medical file
+
+| key          | type                | options          | default value    |
+| ------------ | ------------------- | ---------------- | ---------------- |
+| The patient's condition        | String              | required,  | N/A              |
+| username         | Schema <User>              | required         | N/A              |
+| password     | String              | N/A              | N/A              |
+| phone       | number              | N/A              | N/A |
+
+
+ 
+ 
+ ### ▼ Roles
+
+| key         | type   | options  | default value |
+| ----------- | ------ | -------- | ------------- |
+| role        | String | required | N/A           |
+| permissions | Array  | required | N/A           |
+| timestamp   | Date   | N/A      | Date now      |
+
  
