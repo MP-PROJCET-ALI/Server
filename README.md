@@ -1,5 +1,15 @@
 # Server
 
+
+➤ Server side: https://github.com/MP-PROJCET-ALI/Server
+
+➤ Deployment: https://Deployment
+
+➤ While running locally: http://localhost:3000
+
+➤ Trello: https://trello.com/b/ObBLMFK9/final-project-planning
+
+➤ Slides: https://Slides
  story
 
  **Location Page**
