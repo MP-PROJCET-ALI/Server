@@ -5,6 +5,8 @@
 
 ➤ Deployment: https://Deployment
 
+➤ Server Frontend: http://localhost:5000
+
 ➤ While running locally: http://localhost:5000
 
 ➤ Trello: https://trello.com/b/ObBLMFK9/final-project-planning
