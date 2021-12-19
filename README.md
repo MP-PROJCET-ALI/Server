@@ -46,6 +46,21 @@ A doctor can spend medication and write reports with your medical file, and he c
  
  ![Blank diagram backEnd project](https://user-images.githubusercontent.com/92247967/146677427-60e1ad46-9b5a-4c0d-93ea-f92ce133243a.png)
  
+ ### ■ Backend routes
+ 
+| HTTP Method | URL            | Request Body                                                  | Success status | Error Status  | Permissions                |  Description                                                  |
+| ----------- | -------------- | ---------------------------------------------------------- | -------------- | ------------ | --------------------------------|---------------------------- |
+| GET         | `/login/:id`     | n/a                                                          | 200            | 404          |   public `<Route>`                |Check if user is logged in and return profile page           |
+| POST        | `/signup` | {username, email, password }                                    | 201            | 404          |  public `<Route>`               | Checks if fields not empty (422) and user not exists (409), then create user with encrypted password, and store user in session |
+| POST        | `/login`  | {email, password}                                         | 200            | 401          |  public `<Route>`               | Checks if fields not empty (422), if user exists (404), and if password matches (404), then stores user in session |
+| POST        | `/logout` | n/a                                                      | 204            | 400          |  user only `<PrivateRoute>`               | Logs out the user                                            |
+| GET         | `/post`        | n/a | 200               | 404   |  public `<Route>`          |Used to get one post by id . |Show the user file
+| PUT         | `/updatemedicl`  | {Health status, Treatments, diseases,  Conversion |  201           | 400      |  Admin only `<PrivateRoute>`    | Admin to update one          
+| get         | `/readmedicl`  | {Health status, Treatments, diseases,  Conversion |  201           | 400      |  Admin only `<PrivateRoute>`    | Admin to get one    | delete         | `/deletemedicl`  | {Health status, Treatments, diseases,  Conversion |  201           | 400      |  Admin only `<PrivateRoute>`    | Admin to delete one 
+| Post         | `/medicl`  | {Health status, Treatments, diseases,  Conversion |  201           | 400      |  Admin only `<PrivateRoute>`    | Admin to post one 
+| Post         | `/ceratrole`  | {Role, Permossin |  201           | 400      |  Admin only `<PrivateRoute>`    | Admin to post one 
+| get         | `/readmedicl`  | {Role, Permossin |  201           | 400      |  Admin only `<PrivateRoute>`    | Admin to get one 
+ 
   ## UML Diagram
   
   
