@@ -172,7 +172,7 @@ To run the server on production mode.
 | ------------ | ------------------- | ---------------- | ---------------- |
 | name        | String              | required | N/A              |
 | Rejon         | String              | required         | N/A              |
-| the ID number     | String              | N/A              | N/A              |
+| the ID number     | String              | unique              | N/A              |
  | license number     | String              | N/A              | N/A              |
 
   ## ER Diagram
