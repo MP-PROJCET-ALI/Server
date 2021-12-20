@@ -161,7 +161,7 @@ To run the server on production mode.
 
 | key          | type                | options          | default value    |
 | ------------ | ------------------- | ---------------- | ---------------- |
-| username        | String              | required, unique | N/A              |
+| username        | String              | required | N/A              |
 | Role         | Schema <Roles>               | N/A         | N/A              |
 | Hospital     | String              | N/A              | N/A              |
 
@@ -170,7 +170,7 @@ To run the server on production mode.
 
 | key          | type                | options          | default value    |
 | ------------ | ------------------- | ---------------- | ---------------- |
-| name        | String              | required, unique | N/A              |
+| name        | String              | required | N/A              |
 | Rejon         | String              | required         | N/A              |
 | the ID number     | String              | N/A              | N/A              |
  | license number     | String              | N/A              | N/A              |
