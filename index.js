@@ -5,8 +5,12 @@ const app = express();
 dotenv.config();
 
 app.use(express.json());
+const userRoute = require("./routers/routes/user");
 
-const PORT = process.env.PORT
+app.use(userRoute);
+
+
+const PORT = process.env.PORT || 5000;
 const db = require("./db/index");
 
 app.listen(PORT, () => {
