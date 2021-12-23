@@ -13,16 +13,16 @@ const CLIENT_URL = "http://localhost:5000";
 
 
 const login = (req, res) => {
-    const { username, phone, password } = req.body;
+    const { Fallname, email, password } = req.body;
     const SECRET_KEY = process.env.SECRET_KEY;
-    if (!((phone || username) && password)) {
+    if (!((email || Fallname) && password)) {
       res.status(200).json({ msg: "Kindly fill all inputs" });
     } else {
       userModel
-        .findOne({ $or: [{ username }, { phone }] })
+        .findOne({ $or: [{ Fallname }, { email }] })
         .then(async (result) => {
           if (result) {
-            if (phone === result.phone || username === result.username) {
+            if (email === result.email || Fallname === result.Fallname) {
               const payload = {
                 id: result._id,
                 role: result.role,
@@ -35,13 +35,13 @@ const login = (req, res) => {
               if (unhashPassword) {
                 res.status(200).json({ result, token });
               } else {
-                res.status(200).json("invalid username/phone or password");
+                res.status(200).json("invalid Fallname/email or password");
               }
             } else {
-              res.status(200).json("invalid username/phone or password");
+              res.status(200).json("invalid Fallname/email or password");
             }
           } else {
-            res.status(200).json("Username or phone does not exist");
+            res.status(200).json("Fallname or email does not exist");
           }
         })
         .catch((err) => {
@@ -51,10 +51,10 @@ const login = (req, res) => {
   };
 ///
 const resgister = (req, res) => {
-  const { username, email, password, password2, phone } = req.body;
+  const { Fallname, email, password, password2, phone ,role } = req.body;
   let errors = [];
 
-  if (!username || !email || !password || !password2 || !phone) {
+  if (!Fallname || !email || !password || !password2 || !phone || !role) {
     errors.push({ msg: "Please enter all fields" });
   }
 
@@ -69,10 +69,11 @@ const resgister = (req, res) => {
   if (errors.length > 0) {
     res.status(200).json({
       errors,
-      username,
+      Fallname,
       email,
       password,
       password2,
+      role,
     });
   } else {
     userModel.findOne({ email: email }).then((user) => {
@@ -80,10 +81,11 @@ const resgister = (req, res) => {
         errors.push({ msg: "Email ID already registered" });
         res.status(200).json({
           errors,
-          username,
+          Fallname,
           email,
           password,
           password2,
+          role,
         });
       } else {
         const oauth2Client = new OAuth2(
@@ -99,7 +101,7 @@ const resgister = (req, res) => {
         const accessToken = oauth2Client.getAccessToken();
 
         const token = jwt.sign(
-          { username, email, password, phone },
+          { Fallname, email, password, phone,role },
           SECRET_KEY,
           {
             expiresIn: "30m",
@@ -159,16 +161,17 @@ const activate = (req, res) => {
       if (err) {
         res.json({ err: "Incorrect or expired link! Please register again." });
       } else {
-        const { username, email, password, phone } = decodedToken;
+        const { Fallname, email, password, phone } = decodedToken;
         userModel.findOne({ email: email }).then((user) => {
           if (user) {
             res.json({ err: "Email ID already registered! Please log in." });
           } else {
             const newUser = new userModel({
-              username,
+              Fallname,
               email,
               password,
               phone,
+              role:"61c4660902f5af6c49d02a15"
             });
 
               bcrypt.hash(newUser.password, 10, (err, hash) => {

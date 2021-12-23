@@ -1,9 +1,9 @@
-const doctormodel = require("../../db/models/doctor");
+const medicalfilemodel = require("../../db/models/medicalfile");
 
-const addmedicl = (req, res) => {
+const addfilemodel = (req, res) => {
     const { pharmaceutical,patientscondition,img, desc ,user} = req.body;
     try {
-      const newmedicl = new doctormodel({
+      const newmedicalfilemodel = new medicalfilemodel({
         pharmaceutical,
         patientscondition,
         img,
@@ -11,7 +11,7 @@ const addmedicl = (req, res) => {
         time: Date(),
         user,
       });
-      newmedicl
+      newmedicalfilemodel
         .save()
         .then((result) => {
           res.status(200).json(result);
@@ -27,23 +27,23 @@ const addmedicl = (req, res) => {
 
  
 
-  const updatemedicl = (req, res) => {
+  const updatefilemodel = (req, res) => {
     const { _id } = req.params;
-    const { desc,pharmaceutical,patientscondition } = req.body;
+    const { raysimg,patientscondition,pharmaceutical } = req.body;
     try {
-        doctormodel.findOne({ _id: _id }).then((item) => {
+        medicalfilemodel.findOne({ _id: _id }).then((item) => {
         if (item.user == req.token._id) {
-            doctormodel
+            medicalfilemodel
             .findOneAndUpdate(
               { _id: _id },
-              { $set: { desc: desc,pharmaceutical: pharmaceutical,patientscondition: patientscondition, time: Date() } },
+              { $set: { raysimg: raysimg,patientscondition: patientscondition,pharmaceutical: pharmaceutical, time: Date() } },
               { new: true }
             )
             .then((result) => {
               res.status(200).json(result);
             });
         } else if (req.token.role == "61a734cd947e8eba47efbc68") {
-            doctormodel
+            medicalfilemodel
             .findOneAndUpdate(
               { _id: _id },
               { $set: { desc: desc,pharmaceutical: pharmaceutical,patientscondition: patientscondition, time: Date()  } },
@@ -62,9 +62,9 @@ const addmedicl = (req, res) => {
   };
 
 
-  const geAllmedicl = (req, res) => {
+  const geAllfilemodel = (req, res) => {
     try {
-      doctormodel.find({ isDel: false }).then((result) => {
+        medicalfilemodel.find({ isDel: false }).then((result) => {
         res.status(200).json(result);
       });
     } catch (error) {
@@ -72,10 +72,10 @@ const addmedicl = (req, res) => {
     }
   };
   
-  const getmedicl = (req, res) => {
+  const getfilemodel = (req, res) => {
     const { _id } = req.params;
     try {
-      doctormodel.findOne({ _id: _id }).then((result) => {
+        medicalfilemodel.findOne({ _id: _id }).then((result) => {
         if (result.isDel == false) {
           res.status(200).json(result);
         } else {
@@ -90,9 +90,9 @@ const addmedicl = (req, res) => {
   
 
   module.exports = {
-    addmedicl,
-    updatemedicl,
-    geAllmedicl,
-    getmedicl,
+    addfilemodel,
+    updatefilemodel,
+    geAllfilemodel,
+    getfilemodel,
   };
   
