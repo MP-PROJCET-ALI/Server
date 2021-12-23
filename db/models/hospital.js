@@ -5,7 +5,8 @@ const hospital = new mongoose.Schema({
   rejon: { type: String, required: true, unique: true },
   licensenumber: { type: String, require: true },
   user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  workout: { type: mongoose.Schema.Types.ObjectId, ref: "Doctor" },
  
 });
 
-module.exports = mongoose.model("hospital", hospital);
+module.exports = mongoose.model("Hospital", hospital);
