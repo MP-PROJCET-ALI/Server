@@ -9,6 +9,10 @@ const SECRET_RESET_KEY = process.env.SECRET_RESET_KEY;
 // const SALT = process.env.SALT;
 const CLIENT_URL = "http://localhost:3000";
 
+
+////////////////////////////////////////////
+////////////////////////////////////////////
+////////////////////////////////////////////
 const login = (req, res) => {
   const { fullName, email, password } = req.body;
   const SECRET_KEY = process.env.SECRET_KEY;
@@ -49,7 +53,10 @@ const login = (req, res) => {
       });
   }
 };
-///
+
+////////////////////////////////////////////
+////////////////////////////////////////////
+////////////////////////////////////////////
 const resgister = (req, res) => {
   const { fullName, email, password, password2, phone, role } = req.body;
   let errors = [];
@@ -152,6 +159,9 @@ const resgister = (req, res) => {
     });
   }
 };
+////////////////////////////////////////////
+////////////////////////////////////////////
+////////////////////////////////////////////
 const activate = (req, res) => {
   const token = req.params.token;
   if (token) {
@@ -190,7 +200,9 @@ const activate = (req, res) => {
     console.log("Account activation error!");
   }
 };
-
+////////////////////////////////////////////
+////////////////////////////////////////////
+////////////////////////////////////////////
 const resetPassword = (req, res) => {
   const { password, password2 } = req.body;
   const id = req.params.id;
@@ -223,7 +235,9 @@ const resetPassword = (req, res) => {
   }
 };
 
-//
+////////////////////////////////////////////
+////////////////////////////////////////////
+////////////////////////////////////////////
 
 const forgotPassword = (req, res) => {
   const { email } = req.body;
@@ -310,7 +324,9 @@ const forgotPassword = (req, res) => {
     });
   }
 };
-
+////////////////////////////////////////////
+////////////////////////////////////////////
+////////////////////////////////////////////
 const gotoReset = (req, res) => {
   const { token } = req.params;
 
@@ -335,7 +351,12 @@ const gotoReset = (req, res) => {
     console.log("Password reset error!");
   }
 };
-// profile
+
+
+
+////////////////////////////////////////////
+/////////////////profile///////////////////////////
+////////////////////////////////////////////
 const findUserByEmail = (req, res) => {
   const { email } = req.params;
   userModel
@@ -377,6 +398,8 @@ const deleteUser = (req, res) => {
       res.json(err);
     });
 };
+
+
 module.exports = {
   resgister,
   activate,
