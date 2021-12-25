@@ -6,55 +6,55 @@ const OAuth2 = google.auth.OAuth2;
 const nodemailer = require("nodemailer");
 const SECRET_KEY = process.env.SECRET_KEY;
 const SECRET_RESET_KEY = process.env.SECRET_RESET_KEY;
+// const SALT = process.env.SALT;
 const CLIENT_URL = "http://localhost:3000";
 
-
-
-
-
 const login = (req, res) => {
-    const { Fallname, email, password } = req.body;
-    const SECRET_KEY = process.env.SECRET_KEY;
-    if (!((email ) && password)) {
-      res.status(200).json({ msg: "Kindly fill all inputs" });
-    } else {
-      userModel
-        .findOne({ $or: [{ Fallname }, { email }] })
-        .then(async (result) => {
-          if (result) {
-            if (email === result.email || Fallname === result.Fallname) {
-              const payload = {
-                id: result._id,
-                role: result.role,
-              };
-              const options = {
-                expiresIn: "30m",
-              };
-              const token = jwt.sign(payload, SECRET_KEY, options);
-              const unhashPassword = await bcrypt.compare(password, result.password);
-              if (unhashPassword) {
-                res.status(200).json({ result, token });
-              } else {
-                res.status(200).json("invalid Fallname/email or password");
-              }
+  const { fullName, email, password } = req.body;
+  const SECRET_KEY = process.env.SECRET_KEY;
+  if (!(email && password)) {
+    res.status(200).json({ msg: "Kindly fill all inputs" });
+  } else {
+    userModel
+      .findOne({ $or: [{ fullName }, { email }] })
+      .then(async (result) => {
+        if (result) {
+          if (email === result.email || fullName === result.fullName) {
+            const payload = {
+              id: result._id,
+              role: result.role,
+            };
+            const options = {
+              expiresIn: "30m",
+            };
+            const token = jwt.sign(payload, SECRET_KEY, options);
+            const unhashPassword = await bcrypt.compare(
+              password,
+              result.password
+            );
+            if (unhashPassword) {
+              res.status(200).json({ result, token });
             } else {
-              res.status(200).json("invalid Fallname/email or password");
+              res.status(200).json("invalid fullName/email or password");
             }
           } else {
-            res.status(200).json("Fallname or email does not exist");
+            res.status(200).json("invalid fullName/email or password");
           }
-        })
-        .catch((err) => {
-          res.status(200).json(err);
-        });
-    }
-  };
+        } else {
+          res.status(200).json("fullName or email does not exist");
+        }
+      })
+      .catch((err) => {
+        res.status(200).json(err);
+      });
+  }
+};
 ///
 const resgister = (req, res) => {
-  const { Fallname, email, password, password2, phone ,role } = req.body;
+  const { fullName, email, password, password2, phone, role } = req.body;
   let errors = [];
 
-  if (!Fallname || !email || !password || !password2 || !phone || !role) {
+  if (!fullName || !email || !password || !password2 || !phone || !role) {
     errors.push({ msg: "Please enter all fields" });
   }
 
@@ -69,11 +69,10 @@ const resgister = (req, res) => {
   if (errors.length > 0) {
     res.status(200).json({
       errors,
-      Fallname,
+      fullName,
       email,
       password,
       password2,
-      
     });
   } else {
     userModel.findOne({ email: email }).then((user) => {
@@ -81,11 +80,10 @@ const resgister = (req, res) => {
         errors.push({ msg: "Email ID already registered" });
         res.status(200).json({
           errors,
-          Fallname,
+          fullName,
           email,
           password,
           password2,
-        
         });
       } else {
         const oauth2Client = new OAuth2(
@@ -101,7 +99,7 @@ const resgister = (req, res) => {
         const accessToken = oauth2Client.getAccessToken();
 
         const token = jwt.sign(
-          { Fallname, email, password, phone,role },
+          { fullName, email, password, phone, role },
           SECRET_KEY,
           {
             expiresIn: "30m",
@@ -161,30 +159,29 @@ const activate = (req, res) => {
       if (err) {
         res.json({ err: "Incorrect or expired link! Please register again." });
       } else {
-        const { Fallname, email, password, phone } = decodedToken;
+        const { fullName, email, password, phone } = decodedToken;
         userModel.findOne({ email: email }).then((user) => {
           if (user) {
             res.json({ err: "Email ID already registered! Please log in." });
           } else {
             const newUser = new userModel({
-              Fallname,
+              fullName,
               email,
               password,
               phone,
-              role:"61c4660902f5af6c49d02a15"
+              role: "61c46c8e02f5af6c49d02a17",
             });
 
-              bcrypt.hash(newUser.password, 10, (err, hash) => {
-                if (err) throw err;
-                newUser.password = hash;
-                newUser
-                  .save()
-                  .then((user) => {
-                    res.json({ success: user });
-                  })
-                  .catch((err) => console.log(err));
-              });
-            
+            bcrypt.hash(newUser.password, 10, (err, hash) => {
+              if (err) throw err;
+              newUser.password = hash;
+              newUser
+                .save()
+                .then((user) => {
+                  res.json({ success: user });
+                })
+                .catch((err) => console.log(err));
+            });
           }
         });
       }
@@ -194,44 +191,39 @@ const activate = (req, res) => {
   }
 };
 
-
 const resetPassword = (req, res) => {
-const { password, password2 } = req.body;
-const id = req.params.id;
+  const { password, password2 } = req.body;
+  const id = req.params.id;
 
-if (!password || !password2) {
-  res.json({error:"Please enter all fields."});
-}
+  if (!password || !password2) {
+    res.json({ error: "Please enter all fields." });
+  } else if (password.length < 8) {
+    res.json({ error: "Password must be at least 8 characters." });
+  } else if (password != password2) {
+    res.json({ error: "Passwords do not match." });
+  } else {
+    bcrypt.genSalt(10, (err, salt) => {
+      bcrypt.hash(password, salt, (err, hash) => {
+        if (err) throw err;
+        password = hash;
 
-else if (password.length < 8) {
-  res.json({error:"Password must be at least 8 characters."});
-}
-
-else if (password != password2) {
-  res.json({error:"Passwords do not match."});
-} else {
-  bcrypt.genSalt(10, (err, salt) => {
-    bcrypt.hash(password, salt, (err, hash) => {
-      if (err) throw err;
-      password = hash;
-
-      userModel.findByIdAndUpdate(
-        { _id: id },
-        { password },
-        function (err, result) {
-          if (err) {
-            res.json({error:"Error resetting password!"});
-          } else {
-            res.json({error:"Password reset successfully!"});
+        userModel.findByIdAndUpdate(
+          { _id: id },
+          { password },
+          function (err, result) {
+            if (err) {
+              res.json({ error: "Error resetting password!" });
+            } else {
+              res.json({ error: "Password reset successfully!" });
+            }
           }
-        }
-      );
+        );
+      });
     });
-  });
-}
+  }
 };
 
-// 
+//
 
 const forgotPassword = (req, res) => {
   const { email } = req.body;
@@ -319,7 +311,6 @@ const forgotPassword = (req, res) => {
   }
 };
 
-
 const gotoReset = (req, res) => {
   const { token } = req.params;
 
@@ -331,9 +322,11 @@ const gotoReset = (req, res) => {
         const { _id } = decodedToken;
         userModel.findById(_id, (err, user) => {
           if (err) {
-            res.json({ error: "User with email ID does not exist! Please try again." });
+            res.json({
+              error: "User with email ID does not exist! Please try again.",
+            });
           } else {
-            res.json({ success: _id});
+            res.json({ success: _id });
           }
         });
       }
@@ -342,6 +335,56 @@ const gotoReset = (req, res) => {
     console.log("Password reset error!");
   }
 };
+// profile
+const findUserByEmail = (req, res) => {
+  const { email } = req.params;
+  userModel
+    .find({ email: `${email}` })
+    .then((result) => {
+      res.send(result);
+    })
+    .catch((err) => {
+      res.send(err);
+    });
+};
 
+const editFullName = (req, res) => {
+  const { email } = req.params;
+  const { fullName } = req.body;
+  userModel
+    .findOneAndUpdate(
+      { email: `${email}` },
+      { $set: { fullName } },
+      { new: true }
+    )
+    .then((result) => {
+      res.send(result);
+    })
+    .catch((err) => {
+      res.send(err);
+    });
+};
+const deleteUser = (req, res) => {
+  const { id } = req.params;
 
-module.exports = { resgister, activate,login,gotoReset,forgotPassword,resetPassword };
+  userModel
+    .findOneAndRemove({ _id: id }, { new: true })
+    .exec()
+    .then((result) => {
+      res.json(result);
+    })
+    .catch((err) => {
+      res.json(err);
+    });
+};
+module.exports = {
+  resgister,
+  activate,
+  login,
+  gotoReset,
+  forgotPassword,
+  resetPassword,
+  findUserByEmail,
+  editFullName,
+  deleteUser,
+};

@@ -8,7 +8,10 @@ const {
   login,
   gotoReset,
   forgotPassword,
-  resetPassword 
+  resetPassword,
+  findUserByEmail, 
+  editFullName,
+  deleteUser,
 } = require("./../controllers/user");
 const authentication = require("./../middleware/authentication");
 
@@ -20,6 +23,10 @@ userRoute.post("/login", login);
 userRoute.post('/forgott', forgotPassword);
 userRoute.get('/forgot/:token', gotoReset);
 userRoute.post('/reset/:id', resetPassword);
+// profiel
+userRoute.get("/email/:email", findUserByEmail);
+userRoute.put("/edit/:email", editFullName);
+userRoute.delete("/delete/:id", deleteUser);
 
 module.exports = userRoute;
 

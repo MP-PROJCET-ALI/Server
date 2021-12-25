@@ -1,5 +1,5 @@
 const rolemodel = require("../../db/models/role");
-// انشاء رول جديد اما ان يكون ادمن او يوزر 
+// انشاء رول جديد اما ان يكون ادمن او يوزر
 const newrolr = (req, res) => {
   const { role, permossion } = req.body;
 
