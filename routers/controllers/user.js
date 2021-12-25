@@ -6,7 +6,7 @@ const OAuth2 = google.auth.OAuth2;
 const nodemailer = require("nodemailer");
 const SECRET_KEY = process.env.SECRET_KEY;
 const SECRET_RESET_KEY = process.env.SECRET_RESET_KEY;
-const CLIENT_URL = "http://localhost:5000";
+const CLIENT_URL = "http://localhost:3000";
 
 
 
@@ -15,7 +15,7 @@ const CLIENT_URL = "http://localhost:5000";
 const login = (req, res) => {
     const { Fallname, email, password } = req.body;
     const SECRET_KEY = process.env.SECRET_KEY;
-    if (!((email || Fallname) && password)) {
+    if (!((email ) && password)) {
       res.status(200).json({ msg: "Kindly fill all inputs" });
     } else {
       userModel
@@ -73,7 +73,7 @@ const resgister = (req, res) => {
       email,
       password,
       password2,
-      role,
+      
     });
   } else {
     userModel.findOne({ email: email }).then((user) => {
@@ -85,7 +85,7 @@ const resgister = (req, res) => {
           email,
           password,
           password2,
-          role,
+        
         });
       } else {
         const oauth2Client = new OAuth2(
