@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-// سكيما الرول 
+// سكيما الرول
 const role = new mongoose.Schema({
   role: { type: String },
   permossion: { type: Array },
