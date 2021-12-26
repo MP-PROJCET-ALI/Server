@@ -1,4 +1,4 @@
-const doctormodel = require("../../db/models/doctor");
+// const doctormodel = require("../../db/models/doctor");
 
 
 ////////////////////////////////////////////
