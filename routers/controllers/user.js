@@ -130,7 +130,7 @@ const resgister = (req, res) => {
             expiresIn: "30m",
           }
         );
-
+// 
         const output = `
                   <h2>Please click on below link to activate your account</h2>
                   <p>${CLIENT_URL}/activate/${token}</p>
