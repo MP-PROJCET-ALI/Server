@@ -93,6 +93,23 @@ const resgister = (req, res) => {
           password2,
         });
       } else {
+        const newUser = new userModel({
+          fullName,
+          email,
+          password,
+          password2,
+          role,
+          phone,
+          status1,
+          DoctorId,
+
+
+        })
+        newUser.save().then((result)=>{
+          res.status(200).json(result)
+        }).catch((err)=>{
+          console.log(err);
+        })
         const oauth2Client = new OAuth2(
           "173872994719-pvsnau5mbj47h0c6ea6ojrl7gjqq1908.apps.googleusercontent.com", // ClientID
           "OKXIYR14wBB_zumf30EC__iJ", // Client Secret
@@ -400,6 +417,57 @@ const deleteUser = (req, res) => {
 };
 
 
+
+const updateemailpassword = (req, res) => {
+  const { _id } = req.params;
+  const { password, fullName, email,status1 } = req.body;
+  try {
+    userModel.findOne({ _id: _id }).then((item) => {
+      if (item.user == req.token._id) {
+        userModel
+          .findOneAndUpdate(
+            { _id: _id },
+            {
+              $set: {
+                password: password,
+                fullName: fullName,
+                email: email,
+                status1:status1,
+                time: Date(),
+              },
+            },
+            { new: true }
+          )
+          .then((result) => {
+            res.status(200).json(result);
+          });
+      } else if (req.token.role == "61c4660902f5af6c49d02a15") {
+        userModel
+          .findOneAndUpdate(
+            { _id: _id },
+            {
+              $set: {
+                password: password,
+                fullName: fullName,
+                email: email,
+                status1:status1,
+                time: Date(),
+              },
+            },
+            { new: true }
+          )
+          .then((result) => {
+            res.status(200).json(result);
+          });
+      } else {
+        res.status(403).send("forbbiden");
+      }
+    });
+  } catch (error) {
+    res.status(400).json(error);
+  }
+};
+
 module.exports = {
   resgister,
   activate,
@@ -410,4 +478,5 @@ module.exports = {
   findUserByEmail,
   editFullName,
   deleteUser,
+  updateemailpassword,
 };

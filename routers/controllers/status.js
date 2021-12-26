@@ -72,7 +72,7 @@ const getstatus = (req, res) => {
 ////////////////////////////////////////////
 const updatestatus = (req, res) => {
   const { _id } = req.params;
-  const { rejected, apprared, pending } = req.body;
+  const { status1 } = req.body;
   try {
     statusmodel.findOne({ _id: _id }).then((item) => {
       if (item.user == req.token._id) {

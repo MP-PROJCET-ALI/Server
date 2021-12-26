@@ -13,6 +13,6 @@ statusRouter.get("/status/:_id", getstatus);
 statusRouter.get("/allstatuspending", authentication, geAllstatuspending);
 statusRouter.get("/allstatus", authentication, geAllstatus);
 statusRouter.put("/updatestatus/:_id", authentication, updatestatus);
-statusRouter.post("/newmedicl", authentication, addstatus);
+statusRouter.post("/status/create", authentication, addstatus);
 
 module.exports = statusRouter;
