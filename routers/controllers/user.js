@@ -54,7 +54,7 @@ const login = (req, res) => {
 };
 ///
 const resgister = (req, res) => {
-  const { fullName, email, password, password2, phone, status1,licenseNumber,location,documents,role,DoctorId } = req.body;
+  const { fullName, email, password, password2, phone, status1,licenseNumber,location,documents,role,DoctorId,patients,file } = req.body;
   let errors = [];
 
   // if (!fullName || !email || !password || !password2 || !phone || !role|| !status1 || !licenseNumber || !location || !documents||!DoctorId)  {
@@ -92,23 +92,25 @@ const resgister = (req, res) => {
           password2,
         });
       } else {
-        const newUser = new userModel({
-          fullName,
-          email,
-          password,
-          password2,
-          role,
-          phone,
-          status1,
-          DoctorId,
+        // const newUser = new userModel({
+        //   fullName,
+        //   email,
+        //   password,
+        //   password2,
+        //   role,
+        //   phone,
+        //   status1,
+        //   DoctorId,
+        //   patients,
+        //   file,
           
          
-        })
-        newUser.save().then((result)=>{
-          res.status(200).json(result)
-        }).catch((err)=>{
-          console.log(err);
-        })
+        // })
+        // newUser.save().then((result)=>{
+        //   res.status(200).json(result)
+        // }).catch((err)=>{
+        //   console.log(err);
+        // })
          const oauth2Client = new OAuth2(
           "173872994719-pvsnau5mbj47h0c6ea6ojrl7gjqq1908.apps.googleusercontent.com", // ClientID
           "OKXIYR14wBB_zumf30EC__iJ", // Client Secret

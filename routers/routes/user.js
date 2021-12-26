@@ -20,11 +20,11 @@ const {authorization,authorizationhospital,authorizationdoctor} = require("./../
 
 userRoute.post("/resgister", resgister);
 userRoute.get('/activate/:token', activate);
-userRoute.post("/login",authorization,authorizationhospital,authorizationdoctor,authentication, login);
+userRoute.post("/login", login);
 userRoute.post('/forgott', forgotPassword);
 userRoute.get('/forgot/:token', gotoReset);
 userRoute.post('/reset/:id', resetPassword);
-userRoute.put("/updateemailpassword/:_id", authentication, updateemailpassword);
+userRoute.put("/updateemailpassword/:_id", authentication,authorizationdoctor, updateemailpassword);
 
 
 // profiel

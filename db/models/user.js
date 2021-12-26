@@ -9,8 +9,8 @@ const user = new mongoose.Schema({
   patientId: { type: String ,  unique: true,},  // user 
   role: { type: mongoose.Schema.Types.ObjectId, ref: "Role" },  
   status1: { type: mongoose.Schema.Types.ObjectId, ref: "Status", default: false},  
-  file: [{ type: mongoose.Schema.Types.ObjectId, ref: "Medicalfile" }],  // user + doc + hospital
-  patients: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],  //  doc + hospital
+  file: { type: mongoose.Schema.Types.ObjectId, ref: "Medicalfile" },  // user + doc + hospital
+  patients: { type: mongoose.Schema.Types.ObjectId, ref: "User" },  //  doc + hospital
   doctors:[{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],  // user + hospital 
   workAt:{ type: mongoose.Schema.Types.ObjectId, ref: "User" },  //  doc 
   licenseNumber: { type: String, },  //  hospital 

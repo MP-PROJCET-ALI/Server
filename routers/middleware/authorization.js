@@ -1,5 +1,5 @@
 const roleModel = require("../../db/models/role");
-
+// admin
 const authorization = async (req, res, next) => {
   try {
     const roleID = req.token.role;
@@ -13,7 +13,7 @@ const authorization = async (req, res, next) => {
     res.status(403).json(err);
   }
 };
-
+// Hospital
 const authorizationhospital = async (req, res, next) => {
   try {
     const roleID = req.token.role;
@@ -27,7 +27,7 @@ const authorizationhospital = async (req, res, next) => {
     res.status(403).json(err);
   }
 };
-
+// Doctor
 const authorizationdoctor = async (req, res, next) => {
   try {
     const roleID = req.token.role;
