@@ -19,6 +19,8 @@ const login = (req, res) => {
       .findOne({ $or: [{ fullName }, { email }] })
       .then(async (result) => {
         if (result) {
+          console.log(email,"===",result.email);
+          console.log(fullName,"===",result.fullName);
           if (email === result.email || fullName === result.fullName) {
             const payload = {
               id: result._id,
@@ -32,7 +34,8 @@ const login = (req, res) => {
               password,
               result.password
             );
-            if (unhashPassword) {
+            console.log(unhashPassword,"vunhashPassword");
+            if (password === result.password ) {
               res.status(200).json({ result, token });
             } else {
               res.status(200).json("invalid fullName/email or password");
@@ -51,28 +54,31 @@ const login = (req, res) => {
 };
 ///
 const resgister = (req, res) => {
-  const { fullName, email, password, password2, phone, role } = req.body;
+  const { fullName, email, password, password2, phone, status1,licenseNumber,location,documents,role,DoctorId } = req.body;
   let errors = [];
 
-  if (!fullName || !email || !password || !password2 || !phone || !role) {
-    errors.push({ msg: "Please enter all fields" });
-  }
+  // if (!fullName || !email || !password || !password2 || !phone || !role|| !status1 || !licenseNumber || !location || !documents||!DoctorId)  {
+  //   errors.push({ msg: "Please enter all fields" });
+  // }
 
   if (password != password2) {
     errors.push({ msg: "Passwords do not match" });
   }
 
-  if (password.length < 8) {
-    errors.push({ msg: "Password must be at least 8 characters" });
-  }
+  // if (password.length < 8) {
+  //   errors.push({ msg: "Password must be at least 8 characters" });
+  // }
 
   if (errors.length > 0) {
+   
+
     res.status(200).json({
       errors,
       fullName,
       email,
       password,
       password2,
+      role,
     });
   } else {
     userModel.findOne({ email: email }).then((user) => {
@@ -86,7 +92,24 @@ const resgister = (req, res) => {
           password2,
         });
       } else {
-        const oauth2Client = new OAuth2(
+        const newUser = new userModel({
+          fullName,
+          email,
+          password,
+          password2,
+          role,
+          phone,
+          status1,
+          DoctorId,
+          
+         
+        })
+        newUser.save().then((result)=>{
+          res.status(200).json(result)
+        }).catch((err)=>{
+          console.log(err);
+        })
+         const oauth2Client = new OAuth2(
           "173872994719-pvsnau5mbj47h0c6ea6ojrl7gjqq1908.apps.googleusercontent.com", // ClientID
           "OKXIYR14wBB_zumf30EC__iJ", // Client Secret
           "https://developers.google.com/oauthplayground" // Redirect URL
@@ -169,7 +192,7 @@ const activate = (req, res) => {
               email,
               password,
               phone,
-              role: "61c46c8e02f5af6c49d02a17",
+              role: "61c4660902f5af6c49d02a15",
             });
 
             bcrypt.hash(newUser.password, 10, (err, hash) => {
@@ -377,6 +400,56 @@ const deleteUser = (req, res) => {
       res.json(err);
     });
 };
+// updateemailpassword
+const updateemailpassword = (req, res) => {
+  const { _id } = req.params;
+  const { password, fullName, email,status1 } = req.body;
+  try {
+    userModel.findOne({ _id: _id }).then((item) => {
+      if (item.user == req.token._id) {
+        userModel
+          .findOneAndUpdate(
+            { _id: _id },
+            {
+              $set: {
+                password: password,
+                fullName: fullName,
+                email: email,
+                status1:status1,
+                time: Date(),
+              },
+            },
+            { new: true }
+          )
+          .then((result) => {
+            res.status(200).json(result);
+          });
+      } else if (req.token.role == "61c4660902f5af6c49d02a15") {
+        userModel
+          .findOneAndUpdate(
+            { _id: _id },
+            {
+              $set: {
+                password: password,
+                fullName: fullName,
+                email: email,
+                status1:status1,
+                time: Date(),
+              },
+            },
+            { new: true }
+          )
+          .then((result) => {
+            res.status(200).json(result);
+          });
+      } else {
+        res.status(403).send("forbbiden");
+      }
+    });
+  } catch (error) {
+    res.status(400).json(error);
+  }
+};
 module.exports = {
   resgister,
   activate,
@@ -387,4 +460,5 @@ module.exports = {
   findUserByEmail,
   editFullName,
   deleteUser,
+  updateemailpassword,
 };

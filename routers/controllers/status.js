@@ -2,14 +2,10 @@ const statusmodel = require("../../db/models/status");
 
 ////////////////////////////////////////
 const addstatus = (req, res) => {
-  const { pending, apprared, rejected } = req.body;
+  const { status } = req.body;
   try {
     const newstatus = new statusmodel({
-      pending,
-      apprared,
-      rejected,
-      notative,
-      time: Date(),
+      status,
     });
     newstatus
       .save()
