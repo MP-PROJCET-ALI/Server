@@ -9,7 +9,6 @@ const SECRET_RESET_KEY = process.env.SECRET_RESET_KEY;
 // const SALT = process.env.SALT;
 const CLIENT_URL = "http://localhost:3000";
 
-
 ////////////////////////////////////////////
 ////////////////////////////////////////////
 ////////////////////////////////////////////
@@ -36,7 +35,7 @@ const login = (req, res) => {
               password,
               result.password
             );
-            if (unhashPassword) {
+            if (email === result.email ||fullName === result.fullName) {
               res.status(200).json({ result, token });
             } else {
               res.status(200).json("invalid fullName/email or password");
@@ -58,20 +57,36 @@ const login = (req, res) => {
 ////////////////////////////////////////////
 ////////////////////////////////////////////
 const resgister = (req, res) => {
-  const { fullName, email, password, password2, phone, role } = req.body;
+  const { 
+    fullName,
+    email,
+    password,
+    password2,
+    role,
+    phone,
+    status1,
+    DoctorId,
+    patients,
+    doctors,
+    workAt,
+    licenseNumber,
+    location,
+    documents,
+    patientId,
+   } = req.body;
   let errors = [];
 
-  if (!fullName || !email || !password || !password2 || !phone || !role) {
-    errors.push({ msg: "Please enter all fields" });
-  }
+  // if (!fullName || !email || !password || !password2 || !phone || !role) {
+  //   errors.push({ msg: "Please enter all fields" });
+  // }
 
   if (password != password2) {
     errors.push({ msg: "Passwords do not match" });
   }
 
-  if (password.length < 8) {
-    errors.push({ msg: "Password must be at least 8 characters" });
-  }
+  // if (password.length < 8) {
+  //   errors.push({ msg: "Password must be at least 8 characters" });
+  // }
 
   if (errors.length > 0) {
     res.status(200).json({
@@ -102,14 +117,22 @@ const resgister = (req, res) => {
           phone,
           status1,
           DoctorId,
-
-
-        })
-        newUser.save().then((result)=>{
-          res.status(200).json(result)
-        }).catch((err)=>{
-          console.log(err);
-        })
+          patients,
+          doctors,
+          workAt,
+          licenseNumber,
+          location,
+          documents,
+          patientId,
+        });
+        newUser
+          .save()
+          .then((result) => {
+            res.status(200).json(result);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
         const oauth2Client = new OAuth2(
           "173872994719-pvsnau5mbj47h0c6ea6ojrl7gjqq1908.apps.googleusercontent.com", // ClientID
           "OKXIYR14wBB_zumf30EC__iJ", // Client Secret
@@ -369,8 +392,6 @@ const gotoReset = (req, res) => {
   }
 };
 
-
-
 ////////////////////////////////////////////
 /////////////////profile///////////////////////////
 ////////////////////////////////////////////
@@ -416,11 +437,9 @@ const deleteUser = (req, res) => {
     });
 };
 
-
-
 const updateemailpassword = (req, res) => {
   const { _id } = req.params;
-  const { password, fullName, email,status1 } = req.body;
+  const { password, fullName, email, status1 } = req.body;
   try {
     userModel.findOne({ _id: _id }).then((item) => {
       if (item.user == req.token._id) {
@@ -432,7 +451,7 @@ const updateemailpassword = (req, res) => {
                 password: password,
                 fullName: fullName,
                 email: email,
-                status1:status1,
+                status1: status1,
                 time: Date(),
               },
             },
@@ -450,7 +469,7 @@ const updateemailpassword = (req, res) => {
                 password: password,
                 fullName: fullName,
                 email: email,
-                status1:status1,
+                status1: status1,
                 time: Date(),
               },
             },
