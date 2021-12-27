@@ -10,7 +10,7 @@ const {
 
 filemodelRouter.get("/filemodel/:_id", getfilemodel);
 filemodelRouter.get("/allfilemodel", authentication, geAllfilemodel);
-filemodelRouter.put("/updatefilemodel/:_id", authentication, updatefilemodel);
-filemodelRouter.post("/newfilemodel", authentication, addfilemodel);
+filemodelRouter.put("/updatefilemodel/:_id", updatefilemodel);
+filemodelRouter.post("/newfilemodel", addfilemodel);
 
 module.exports = filemodelRouter;

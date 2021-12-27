@@ -1,11 +1,12 @@
 const medicalfilemodel = require("../../db/models/medicalfile");
-
+const userModel = require("../../db/models/user");
 
 ////////////////////////////////////////////
 ////////////////////////////////////////////
 ////////////////////////////////////////////
 const addfilemodel = (req, res) => {
-  const { pharmaceutical, patientscondition, img, desc, user } = req.body;
+  const { pharmaceutical, patientscondition, img, desc, user, DoctorId } =
+    req.body;
   try {
     const newmedicalfilemodel = new medicalfilemodel({
       pharmaceutical,
@@ -14,10 +15,24 @@ const addfilemodel = (req, res) => {
       desc,
       time: Date(),
       user,
+      DoctorId,
     });
     newmedicalfilemodel
       .save()
       .then((result) => {
+        userModel
+          .findOneAndUpdate(
+            { _id: result.user },
+            {
+              $push: {
+                file: result._id,
+              },
+            },
+            { new: true }
+          )
+          .then((result) => {
+            res.status(200).json(result);
+          });
         res.status(200).json(result);
       })
       .catch((err) => {
@@ -33,19 +48,14 @@ const addfilemodel = (req, res) => {
 ////////////////////////////////////////////
 const updatefilemodel = (req, res) => {
   const { _id } = req.params;
-  const { raysimg, patientscondition, pharmaceutical } = req.body;
+  const { DoctorId } = req.body;
   try {
-    medicalfilemodel.findOne({ _id: _id }).then((item) => {
-      if (item.user == req.token._id) {
         medicalfilemodel
           .findOneAndUpdate(
-            { _id: _id },
+            { _id: DoctorId },
             {
               $set: {
-                raysimg: raysimg,
-                patientscondition: patientscondition,
-                pharmaceutical: pharmaceutical,
-                time: Date(),
+                isDel: true,
               },
             },
             { new: true }
@@ -53,27 +63,6 @@ const updatefilemodel = (req, res) => {
           .then((result) => {
             res.status(200).json(result);
           });
-      } else if (req.token.role == "61a734cd947e8eba47efbc68") {
-        medicalfilemodel
-          .findOneAndUpdate(
-            { _id: _id },
-            {
-              $set: {
-                desc: desc,
-                pharmaceutical: pharmaceutical,
-                patientscondition: patientscondition,
-                time: Date(),
-              },
-            },
-            { new: true }
-          )
-          .then((result) => {
-            res.status(200).json(result);
-          });
-      } else {
-        res.status(403).send("forbbiden");
-      }
-    });
   } catch (error) {
     res.status(400).json(error);
   }
