@@ -35,7 +35,7 @@ const login = (req, res) => {
               password,
               result.password
             );
-            if (email === result.email ||fullName === result.fullName) {
+            if (email === result.email && password == result.password) {
               res.status(200).json({ result, token });
             } else {
               res.status(200).json("invalid fullName/email or password");
@@ -199,6 +199,7 @@ const resgister = (req, res) => {
     });
   }
 };
+
 ////////////////////////////////////////////
 ////////////////////////////////////////////
 ////////////////////////////////////////////
@@ -240,6 +241,7 @@ const activate = (req, res) => {
     console.log("Account activation error!");
   }
 };
+
 ////////////////////////////////////////////
 ////////////////////////////////////////////
 ////////////////////////////////////////////
@@ -364,6 +366,7 @@ const forgotPassword = (req, res) => {
     });
   }
 };
+
 ////////////////////////////////////////////
 //////////////////////f//////////////////////
 ////////////////////////////////////////////
@@ -399,21 +402,31 @@ const findUserByEmail = (req, res) => {
   const { email } = req.params;
   userModel
     .find({ email: `${email}` })
+    .populate("status1")
     .then((result) => {
       res.send(result);
     })
     .catch((err) => {
       res.send(err);
     });
+    
+
 };
 
 const editFullName = (req, res) => {
   const { email } = req.params;
-  const { fullName } = req.body;
+  const { fullName,newEmail, phone } = req.body;
   userModel
     .findOneAndUpdate(
       { email: `${email}` },
-      { $set: { fullName } },
+      {
+        $set: {
+          fullName: fullName,
+          email: newEmail,
+          phone: phone,
+          time: Date(),
+        },
+      },
       { new: true }
     )
     .then((result) => {
