@@ -8,8 +8,8 @@ const {
   getfilemodel,
 } = require("../controllers/medicalfile");
 
-filemodelRouter.get("/filemodel/:_id", getfilemodel);
-filemodelRouter.get("/allfilemodel", authentication, geAllfilemodel);
+filemodelRouter.get("/filemodel/:id", getfilemodel);
+filemodelRouter.get("/allfilemodel", geAllfilemodel);
 // filemodelRouter.put("/updatefilemodel/:_id", updatefilemodel);
 filemodelRouter.post("/newfilemodel", addfilemodel);
 

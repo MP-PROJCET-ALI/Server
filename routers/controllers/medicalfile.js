@@ -85,14 +85,11 @@ const geAllfilemodel = (req, res) => {
 ////////////////////////////////////////////
 ////////////////////////////////////////////
 const getfilemodel = (req, res) => {
-  const { _id } = req.params;
+  const { id } = req.params;
   try {
-    medicalfilemodel.findOne({ _id: _id }).then((result) => {
-      if (result.isDel == false) {
+    medicalfilemodel.find({ user: id, isDel:false }).then((result) => {
         res.status(200).json(result);
-      } else {
-        res.status(404).send("medicl deleted");
-      }
+      
     });
   } catch (error) {
     res.status(400).json(error);
