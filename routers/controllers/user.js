@@ -57,7 +57,7 @@ const login = (req, res) => {
 ////////////////////////////////////////////
 ////////////////////////////////////////////
 const resgister = (req, res) => {
-  const { 
+  const {
     fullName,
     email,
     password,
@@ -73,7 +73,7 @@ const resgister = (req, res) => {
     location,
     documents,
     patientId,
-   } = req.body;
+  } = req.body;
   let errors = [];
 
   // if (!fullName || !email || !password || !password2 || !phone || !role) {
@@ -199,9 +199,82 @@ const resgister = (req, res) => {
     });
   }
 };
+///////////////////////////////////////////
+//////////////////DoctorId///////////////////////////
+////////////////////////////////////////////
+const addDoctorId = (req, res) => {
+  const { DoctorId } = req.body;
+  try {
+    const newDoctor = new userModel({
+      DoctorId,
+      fullName: " ",
+    });
+    newDoctor
+      .save()
+      .then((result) => {
+        res.status(200).json(result);
+      })
+      .catch((err) => {
+        res.status(200).send(err);
+      });
+  } catch (error) {
+    res.status(200).send(error);
+  }
+};
+const editdoctor = (req, res) => {
+  const { id } = req.params;
+  const { fullName, email, phone, password } = req.body;
+  userModel
+    .findOneAndUpdate(
+      { DoctorId: id },
+      {
+        $set: {
+          fullName: fullName,
+          email: email,
+          password: password,
+          phone: phone,
+          time: Date(),
+        },
+      },
+      { new: true }
+    )
+    .then((result) => {
+      res.send(result);
+    })
+    .catch((err) => {
+      res.send(err);
+    });
+};
+///////////////////////////////////////////
+//////////////////patient///////////////////////////
+////////////////////////////////////////////
 
-////////////////////////////////////////////
-////////////////////////////////////////////
+const adduser = (req, res) => {
+  const { patientId, fullName, email, password, phone } = req.body;
+  try {
+    const newuser = new userModel({
+      patientId,
+      fullName,
+      email,
+      password,
+      phone,
+      role:"61c46c8e02f5af6c49d02a17"
+    });
+    newuser
+      .save()
+      .then( async(result) => {
+        await userModel.findOneAndUpdate({DoctorId:"12345"},{$push:{patients:result._id}})
+        res.status(200).json(result);
+      })
+      .catch((err) => {
+        res.status(200).send(err);
+      });
+  } catch (error) {
+    res.status(200).send(error);
+  }
+};
+///////////////////////////////////////////
+/////////////////////////////////////////////
 ////////////////////////////////////////////
 const activate = (req, res) => {
   const token = req.params.token;
@@ -409,13 +482,11 @@ const findUserByEmail = (req, res) => {
     .catch((err) => {
       res.send(err);
     });
-    
-
 };
 
 const editFullName = (req, res) => {
   const { email } = req.params;
-  const { fullName,newEmail, phone } = req.body;
+  const { fullName, newEmail, phone } = req.body;
   userModel
     .findOneAndUpdate(
       { email: `${email}` },
@@ -511,4 +582,7 @@ module.exports = {
   editFullName,
   deleteUser,
   updateemailpassword,
+  addDoctorId,
+  editdoctor,
+  adduser,
 };

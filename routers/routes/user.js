@@ -12,13 +12,18 @@ const {
   findUserByEmail, 
   editFullName,
   deleteUser,
+  addDoctorId,
   updateemailpassword,
+  editdoctor,
+  adduser,
 } = require("./../controllers/user");
 const authentication = require("./../middleware/authentication");
 
 
 
 userRoute.post("/resgister", resgister);
+userRoute.post("/adduser", adduser);
+
 userRoute.get('/activate/:token', activate);
 userRoute.post("/login", login);
 userRoute.post('/forgott', forgotPassword);
@@ -29,6 +34,9 @@ userRoute.get("/email/:email", findUserByEmail);
 userRoute.put("/edit/:email", editFullName);
 userRoute.delete("/delete/:id", deleteUser);
 userRoute.put("/updateemailpassword/:_id", authentication, updateemailpassword);
+// Hospetal
+userRoute.put("/editdoctor/:id", editdoctor);
+userRoute.post("/newdoctor", addDoctorId);
 
 module.exports = userRoute;
 
