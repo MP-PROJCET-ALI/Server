@@ -223,7 +223,7 @@ const addDoctorId = (req, res) => {
 };
 const editdoctor = (req, res) => {
   const { id } = req.params;
-  const { fullName, email, phone, password } = req.body;
+  const { fullName, email, phone, password,role } = req.body;
   userModel
     .findOneAndUpdate(
       { DoctorId: id },
@@ -233,10 +233,12 @@ const editdoctor = (req, res) => {
           email: email,
           password: password,
           phone: phone,
+
           time: Date(),
+          role: "61c4983a20623279b6c0768c"
         },
       },
-      { new: true }
+      { new: true, upsert:true }
     )
     .then((result) => {
       res.send(result);
@@ -245,27 +247,29 @@ const editdoctor = (req, res) => {
       res.send(err);
     });
 };
+
 const checkdoctor = (req, res) => {
-  const { id } = req.params;
+  const { id } = req.body;
   userModel
     .findOne(
-      { DoctorId: id },
-   
-      { new: true }
+      { DoctorId: id }
     )
     .then((result) => {
-      res.send(result);
+      res.json(result);
     })
     .catch((err) => {
-      res.send(err);
+      res.json(err);
     });
 };
+
+    
+    
 ///////////////////////////////////////////
 //////////////////patient///////////////////////////
 ////////////////////////////////////////////
 
 const adduser = (req, res) => {
-  const { patientId, fullName, email, password, phone } = req.body;
+  const { patientId, fullName, email, password, phone, docID } = req.body;
   try {
     const newuser = new userModel({
       patientId,
@@ -278,7 +282,7 @@ const adduser = (req, res) => {
     newuser
       .save()
       .then( async(result) => {
-        await userModel.findOneAndUpdate({DoctorId:"12345"},{$push:{patients:result._id}})
+        await userModel.findOneAndUpdate({DoctorId:docID},{$addToSet:{patients:result._id}})
         res.status(200).json(result);
       })
       .catch((err) => {
@@ -601,4 +605,5 @@ module.exports = {
   editdoctor,
   adduser,
   checkdoctor,
+ 
 };
