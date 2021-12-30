@@ -17,6 +17,7 @@ const {
   editdoctor,
   adduser,
   checkdoctor,
+ 
 } = require("./../controllers/user");
 const authentication = require("./../middleware/authentication");
 
@@ -37,7 +38,7 @@ userRoute.delete("/delete/:id", deleteUser);
 userRoute.put("/updateemailpassword/:_id", authentication, updateemailpassword);
 // Hospetal
 userRoute.put("/editdoctor/:id", editdoctor);
-userRoute.get("/checkdoctor/:id", checkdoctor);
+userRoute.post("/checkdoctor", checkdoctor);
 userRoute.post("/newdoctor", addDoctorId);
 
 module.exports = userRoute;
