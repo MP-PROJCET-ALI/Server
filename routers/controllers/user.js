@@ -245,6 +245,21 @@ const editdoctor = (req, res) => {
       res.send(err);
     });
 };
+const checkdoctor = (req, res) => {
+  const { id } = req.params;
+  userModel
+    .findOne(
+      { DoctorId: id },
+   
+      { new: true }
+    )
+    .then((result) => {
+      res.send(result);
+    })
+    .catch((err) => {
+      res.send(err);
+    });
+};
 ///////////////////////////////////////////
 //////////////////patient///////////////////////////
 ////////////////////////////////////////////
@@ -585,4 +600,5 @@ module.exports = {
   addDoctorId,
   editdoctor,
   adduser,
+  checkdoctor,
 };
