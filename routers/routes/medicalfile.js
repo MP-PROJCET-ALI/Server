@@ -7,7 +7,7 @@ const {
   geAllfilemodel,
   getfilemodel,
 } = require("../controllers/medicalfile");
-
+// الملفات الطبية 
 filemodelRouter.get("/filemodel/:id", getfilemodel);
 filemodelRouter.get("/allfilemodel", geAllfilemodel);
 // filemodelRouter.put("/updatefilemodel/:_id", updatefilemodel);
