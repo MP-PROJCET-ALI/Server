@@ -87,7 +87,7 @@ const geAllfilemodel = (req, res) => {
 const getfilemodel = (req, res) => {
   const { id } = req.params;
   try {
-    medicalfilemodel.find({ user: id, isDel:false })
+    medicalfilemodel.find({ user: id, isDel:false }).populate("DoctorId user")
   
 
     .then((result) => {
