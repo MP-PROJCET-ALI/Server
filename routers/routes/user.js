@@ -1,7 +1,6 @@
 const express = require("express");
 const userRoute = express.Router();
 
-
 const {
   resgister,
   activate,
@@ -9,7 +8,7 @@ const {
   gotoReset,
   forgotPassword,
   resetPassword,
-  findUserByEmail, 
+  findUserByEmail,
   editFullName,
   deleteUser,
   addDoctorId,
@@ -17,20 +16,18 @@ const {
   editdoctor,
   adduser,
   checkdoctor,
- 
+  searchUser,
 } = require("./../controllers/user");
 const authentication = require("./../middleware/authentication");
-
-
 
 userRoute.post("/resgister", resgister);
 userRoute.post("/adduser", adduser);
 
-userRoute.get('/activate/:token', activate);
+userRoute.get("/activate/:token", activate);
 userRoute.post("/login", login);
-userRoute.post('/forgott', forgotPassword);
-userRoute.get('/forgot/:token', gotoReset);
-userRoute.post('/reset/:id', resetPassword);
+userRoute.post("/forgott", forgotPassword);
+userRoute.get("/forgot/:token", gotoReset);
+userRoute.post("/reset/:id", resetPassword);
 // profiel
 userRoute.get("/email/:email", findUserByEmail);
 userRoute.put("/edit/:email", editFullName);
@@ -40,6 +37,6 @@ userRoute.put("/updateemailpassword/:_id", authentication, updateemailpassword);
 userRoute.put("/editdoctor/:id", editdoctor);
 userRoute.post("/checkdoctor", checkdoctor);
 userRoute.post("/newdoctor", addDoctorId);
+userRoute.post("/search", searchUser);
 
 module.exports = userRoute;
-

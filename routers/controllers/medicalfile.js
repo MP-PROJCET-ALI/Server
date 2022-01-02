@@ -196,7 +196,7 @@ const geAllfilemodel = (req, res) => {
 const getfilemodel = (req, res) => {
   const { id } = req.params;
   try {
-    medicalfilemodel.find({ user: id, isDel:false }).populate("DoctorId user")
+    medicalfilemodel.find({ user: id, isDel:false }).populate("user").populate({path : 'DoctorId', populate : {path: 'workAt'}})
   
 
     .then((result) => {
@@ -214,4 +214,5 @@ module.exports = {
   geAllfilemodel,
   getfilemodel,
   softDel,
+  // getAliDoctorsInHospetal,
 };

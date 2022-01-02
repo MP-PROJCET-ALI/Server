@@ -7,9 +7,11 @@ const {
   geAllfilemodel,
   getfilemodel,
   softDel,
+  // getAliDoctorsInHospetal,
 } = require("../controllers/medicalfile");
 // الملفات الطبية 
 filemodelRouter.get("/filemodel/:id", getfilemodel);
+// filemodelRouter.get("/getAliDoctors/:id", getAliDoctorsInHospetal);
 filemodelRouter.get("/allfilemodel", geAllfilemodel);
 // التعديل والحذف
 filemodelRouter.put("/updatefilemodel/:_id", updatemedicl);

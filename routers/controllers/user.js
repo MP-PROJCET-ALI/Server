@@ -592,6 +592,32 @@ const updateemailpassword = (req, res) => {
   }
 };
 
+const searchUser = (req, res) =>{
+  const { patientId } = req.body;
+
+  try {
+    userModel.findOne({ patientId}).then((result) => {
+      res.status(200).json(result);
+    });
+  } catch (error) {
+    res.status(400).json(error);
+  }
+}
+// const getAliDoctorsInHospetal = (req, res) => {
+//   const { id } = req.params;
+//   try {
+//     medicalfilemodel.find({ fullName: id,_id: id }).populate("DoctorId")
+  
+
+//     .then((result) => {
+     
+//         res.status(200).json(result);
+//     });
+//   } catch (error) {
+//     res.status(400).json(error);
+//   }
+// };
+// f
 module.exports = {
   resgister,
   activate,
@@ -606,6 +632,6 @@ module.exports = {
   addDoctorId,
   editdoctor,
   adduser,
-  checkdoctor,
+  checkdoctor,searchUser
  
 };
