@@ -208,6 +208,8 @@ const addDoctorId = (req, res) => {
     const newDoctor = new userModel({
       DoctorId,
       fullName: " ",
+      email:" ",
+      role:"61c4983a20623279b6c0768c"
     });
     newDoctor
       .save()

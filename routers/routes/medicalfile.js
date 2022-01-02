@@ -3,14 +3,18 @@ const filemodelRouter = express.Router();
 const authentication = require("./../middleware/authentication");
 const {
   addfilemodel,
-  // updatefilemodel,
+  updatemedicl,
   geAllfilemodel,
   getfilemodel,
+  softDel,
 } = require("../controllers/medicalfile");
 // الملفات الطبية 
 filemodelRouter.get("/filemodel/:id", getfilemodel);
 filemodelRouter.get("/allfilemodel", geAllfilemodel);
-// filemodelRouter.put("/updatefilemodel/:_id", updatefilemodel);
+// التعديل والحذف
+filemodelRouter.put("/updatefilemodel/:_id", updatemedicl);
+filemodelRouter.put("/softDelete/:_id", softDel);
+
 filemodelRouter.post("/newfilemodel", addfilemodel);
 
 module.exports = filemodelRouter;
