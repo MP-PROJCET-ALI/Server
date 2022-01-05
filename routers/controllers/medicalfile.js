@@ -5,13 +5,15 @@ const userModel = require("../../db/models/user");
 ////////////////////////////////////////////
 ////////////////////////////////////////////
 const addfilemodel = (req, res) => {
-  const { pharmaceutical, patientscondition, img, desc, user, DoctorId } =
+  const { pharmaceutical, patientscondition,  desc, user, DoctorId } =
     req.body;
+    console.log(user);
   try {
+    
     const newmedicalfilemodel = new medicalfilemodel({
       pharmaceutical,
       patientscondition,
-      img,
+      // img,
       desc,
       time: Date(),
       user,
@@ -43,41 +45,67 @@ const addfilemodel = (req, res) => {
   }
 };
 
-const updatemedicl = (req, res) => {
-  const { _id } = req.params;
-  const { pharmaceutical, patientscondition, img, desc, } = req.body;
+// const updatemedicl = (req, res) => {
+
+
+//   const { _id } = req.params;
+//   const { pharmaceutical, patientscondition, img, desc, } = req.body;
   
+//   try {
+//     medicalfilemodel.findOne({ _id: _id }).then((item) => {
+//       console.log(item);
+//       if (item) {
+//         medicalfilemodel
+//           .findOneAndUpdate(
+//             { _id: _id },
+//             { $set: { desc: desc,pharmaceutical: pharmaceutical,patientscondition: patientscondition,img: img, time: Date()} },
+//             { new: true }
+//           )
+//           .then((result) => {
+//             res.status(200).json(result);
+//           });
+//       } else if (req.token) {
+//         medicalfilemodel
+//           .findOneAndUpdate(
+//             { _id: id },
+//             { $set: { desc: desc,pharmaceutical: pharmaceutical,patientscondition: patientscondition,img: img, time: Date() } },
+//             { new: true }
+//           )
+//           .then((result) => {
+//             res.status(200).json(result);
+//           });
+//       } else {
+//         res.status(403).send("forbbiden");
+//       }
+//     });
+//   } catch (error) {
+//     res.status(400).json(error);
+//   }
+// };
+
+const updatemedicl =(req,res)=>{
   try {
-    medicalfilemodel.findOne({ _id: _id }).then((item) => {
-      console.log(item);
-      if (item) {
-        medicalfilemodel
-          .findOneAndUpdate(
-            { _id: _id },
-            { $set: { desc: desc,pharmaceutical: pharmaceutical,patientscondition: patientscondition,img: img, time: Date()} },
-            { new: true }
-          )
-          .then((result) => {
-            res.status(200).json(result);
-          });
-      } else if (req.token) {
-        medicalfilemodel
-          .findOneAndUpdate(
-            { _id: id },
-            { $set: { desc: desc,pharmaceutical: pharmaceutical,patientscondition: patientscondition,img: img, time: Date() } },
-            { new: true }
-          )
-          .then((result) => {
-            res.status(200).json(result);
-          });
-      } else {
-        res.status(403).send("forbbiden");
-      }
-    });
-  } catch (error) {
-    res.status(400).json(error);
+    const _id = req.params._id;
+    const { medicalcondition, pharmaceutical, desc } = req.body;
+    
+    const update = {};
+
+    if (medicalcondition) update.medicalcondition = medicalcondition;
+    if (pharmaceutical) update.pharmaceutical = pharmaceutical;
+    if (desc) update.desc = desc;
+   
+    medicalfilemodel
+      .findByIdAndUpdate(_id, update, { new: true })
+      .then((result) => {
+        res.status(200).json(result);
+      })
+      .catch((err) => {
+        res.status(400).json({ error: err.message });
+      });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
   }
-};
+}
 const softDel = (req, res) => {
   const { _id } = req.params;
   try {
@@ -214,5 +242,6 @@ module.exports = {
   geAllfilemodel,
   getfilemodel,
   softDel,
+  
   // getAliDoctorsInHospetal,
 };

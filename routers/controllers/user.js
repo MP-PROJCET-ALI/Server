@@ -4,6 +4,7 @@ var jwt = require("jsonwebtoken");
 const { google } = require("googleapis");
 const OAuth2 = google.auth.OAuth2;
 const nodemailer = require("nodemailer");
+const Doctor = process.env.DOCTOR;
 const SECRET_KEY = process.env.SECRET_KEY;
 const SECRET_RESET_KEY = process.env.SECRET_RESET_KEY;
 // const SALT = process.env.SALT;
@@ -22,6 +23,7 @@ const login = (req, res) => {
       .findOne({ $or: [{ fullName }, { email }] })
       .then(async (result) => {
         if (result) {
+          console.log(result.role);
           if (email === result.email || fullName === result.fullName) {
             const payload = {
               id: result._id,
@@ -35,8 +37,11 @@ const login = (req, res) => {
               password,
               result.password
             );
-            if (email === result.email && password == result.password) {
-              res.status(200).json({ result, token });
+            if(result.role=="61c4981620623279b6c0768a"&& result.status1!='61c82191e027be8294db69c8'){
+              res.status(200).json("Hospital not authorized yet.");
+            }
+             else if (email === result.email && password == result.password) {
+                res.status(200).json({ result, token });
             } else {
               res.status(200).json("invalid fullName/email or password");
             }
@@ -203,12 +208,12 @@ const resgister = (req, res) => {
 //////////////////DoctorId///////////////////////////
 ////////////////////////////////////////////
 const addDoctorId = (req, res) => {
-  const { DoctorId } = req.body;
+  const { DoctorId, workAt } = req.body;
   try {
     const newDoctor = new userModel({
       DoctorId,
-      fullName: " ",
       email:" ",
+      workAt,
       role:"61c4983a20623279b6c0768c"
     });
     newDoctor
@@ -528,6 +533,8 @@ const editFullName = (req, res) => {
       res.send(err);
     });
 };
+
+
 const deleteUser = (req, res) => {
   const { id } = req.params;
 
@@ -541,6 +548,35 @@ const deleteUser = (req, res) => {
       res.json(err);
     });
 };
+ 
+const updateProfile =(req,res)=>{
+  try {
+    const _id = req.params._id;
+    const { fullName, email, password,phone } = req.body;
+    
+    const update = {};
+
+    if (fullName) update.fullName = fullName;
+    if (email) update.email = email;
+    if (password) update.password = password;
+    if (phone) update.phone = phone;
+   
+    userModel
+      .findByIdAndUpdate(_id, update, { new: true })
+      .then((result) => {
+        res.status(200).json(result);
+      })
+      .catch((err) => {
+        res.status(400).json({ error: err.message });
+      });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+}
+
+///////////////////////////////////////////////
+///////////////////////////////////////////////
+//////////////////////////////////////////////
 
 const updateemailpassword = (req, res) => {
   const { _id } = req.params;
@@ -596,28 +632,35 @@ const searchUser = (req, res) =>{
   const { patientId } = req.body;
 
   try {
-    userModel.findOne({ patientId}).then((result) => {
+    userModel.findOne({ patientId}).populate('file').then((result) => {
       res.status(200).json(result);
     });
   } catch (error) {
     res.status(400).json(error);
   }
 }
-// const getAliDoctorsInHospetal = (req, res) => {
-//   const { id } = req.params;
-//   try {
-//     medicalfilemodel.find({ fullName: id,_id: id }).populate("DoctorId")
-  
+////////////////////////////
+const getusersInDoctor = (req, res) => {
+  const {id} = req.params;
+  try {
+    userModel.find({DoctorId:id  }).populate("patients").then((result) => {
+      res.status(200).json(result);
+    });
+  } catch (error) {
+    res.status(400).json(error);
+  }
+};
 
-//     .then((result) => {
-     
-//         res.status(200).json(result);
-//     });
-//   } catch (error) {
-//     res.status(400).json(error);
-//   }
-// };
-// f
+const getDoctor = (req, res) => {
+  try {
+    userModel.find({role:Doctor  }).then((result) => {
+      res.status(200).json(result);
+    });
+  } catch (error) {
+    res.status(400).json(error);
+  }
+};
+
 module.exports = {
   resgister,
   activate,
@@ -632,6 +675,10 @@ module.exports = {
   addDoctorId,
   editdoctor,
   adduser,
-  checkdoctor,searchUser
+  checkdoctor,
+  searchUser,
+  getusersInDoctor,
+  getDoctor,
+  updateProfile,
  
 };

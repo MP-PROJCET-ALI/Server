@@ -1,4 +1,5 @@
 const statusmodel = require("../../db/models/status");
+const userModel = require("../../db/models/user");
 
 ///////////////////////////////////////////////////
 //////////////////////////////////////////////////
@@ -31,7 +32,7 @@ const addstatus = (req, res) => {
 ///////////////////////////////////////////////////
 const geAllstatuspending = (req, res) => {
   try {
-    statusmodel.find({ pending: false }).then((result) => {
+    userModel.find({ status1: '61c8217fe027be8294db69c6' }).then((result) => {
       res.status(200).json(result);
     });
   } catch (error) {
@@ -71,50 +72,11 @@ const getstatus = (req, res) => {
 ////////////////////////////////////////////
 ////////////////////////////////////////////
 const updatestatus = (req, res) => {
-  const { _id } = req.params;
-  const { status1 } = req.body;
+  const { _id, status } = req.body;
   try {
-    statusmodel.findOne({ _id: _id }).then((item) => {
-      if (item.user == req.token._id) {
-        statusmodel
-          .findOneAndUpdate(
-            { _id: _id },
-            {
-              $set: {
-                rejected: rejected,
-                apprared: apprared,
-                pending: pending,
-                notative: notative,
-                time: Date(),
-              },
-            },
-            { new: true }
-          )
-          .then((result) => {
-            res.status(200).json(result);
-          });
-      } else if (req.token.role == "61a734cd947e8eba47efbc68") {
-        statusmodel
-          .findOneAndUpdate(
-            { _id: _id },
-            {
-              $set: {
-                rejected: rejected,
-                apprared: apprared,
-                pending: pending,
-                notative: notative,
-                time: Date(),
-              },
-            },
-            { new: true }
-          )
-          .then((result) => {
-            res.status(200).json(result);
-          });
-      } else {
-        res.status(403).send("forbbiden");
-      }
-    });
+    userModel.findOneAndUpdate({ _id },{status1:status}).then((result) => {
+      res.status(201).json(result);
+    })
   } catch (error) {
     res.status(400).json(error);
   }
