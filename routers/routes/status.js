@@ -10,9 +10,9 @@ const {
 } = require("../controllers/status");
 
 statusRouter.get("/status/:_id", getstatus);
-statusRouter.get("/allstatuspending", authentication, geAllstatuspending);
+statusRouter.get("/allstatuspending", geAllstatuspending);
 statusRouter.get("/allstatus", authentication, geAllstatus);
-statusRouter.put("/updatestatus/:_id", authentication, updatestatus);
+statusRouter.put("/updatestatus", updatestatus);
 statusRouter.post("/status/create", authentication, addstatus);
 
 module.exports = statusRouter;

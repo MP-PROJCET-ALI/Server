@@ -17,6 +17,9 @@ const {
   adduser,
   checkdoctor,
   searchUser,
+  getusersInDoctor,
+   getDoctor,
+   updateProfile,
 } = require("./../controllers/user");
 const authentication = require("./../middleware/authentication");
 
@@ -28,6 +31,8 @@ userRoute.post("/login", login);
 userRoute.post("/forgott", forgotPassword);
 userRoute.get("/forgot/:token", gotoReset);
 userRoute.post("/reset/:id", resetPassword);
+userRoute.put("/updateProfile/:_id", updateProfile);
+
 // profiel
 userRoute.get("/email/:email", findUserByEmail);
 userRoute.put("/edit/:email", editFullName);
@@ -36,7 +41,9 @@ userRoute.put("/updateemailpassword/:_id", authentication, updateemailpassword);
 // Hospetal
 userRoute.put("/editdoctor/:id", editdoctor);
 userRoute.post("/checkdoctor", checkdoctor);
-userRoute.post("/newdoctor", addDoctorId);
+userRoute.post("/newdoctor",  addDoctorId); 
 userRoute.post("/search", searchUser);
+userRoute.post("/gerusers/:id", getusersInDoctor);
+userRoute.get("/getdoctors", getDoctor);
 
 module.exports = userRoute;
